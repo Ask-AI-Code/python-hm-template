@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.responses import JSONResponse
 
 from tasks import create_task
@@ -27,6 +27,11 @@ async def post_build_index_job(customer_id: str, data_source_id: str):
         "customer_id": customer_id,
         "data_source_id": data_source_id,
     }
+
+
+@app.post("/customers/{customer_id}/data_sources/{data_source_id}/key")
+async def post_data_source_key(customer_id: str, data_source_id: str):
+    return Response(status_code=204)
 
 
 @app.post("/task")
