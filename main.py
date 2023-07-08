@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Response
 from fastapi.responses import JSONResponse
+from data_classes import BuildIndexResponse, CustomerDataSourceValidateResponse
 
 from tasks import create_task
 
@@ -11,22 +12,28 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/customers/{customer_id}/data_sources/{data_source_id}/validate")
+@app.get(
+    "/customers/{customer_id}/data_sources/{data_source_id}/validate",
+    response_model=CustomerDataSourceValidateResponse,
+)
 async def get_customer_data_source_validate(customer_id: str, data_source_id: str):
-    return {
-        "validated": False,
-        "customer_id": customer_id,
-        "data_source_id": data_source_id,
-    }
+    return CustomerDataSourceValidateResponse(
+        is_valid=False,
+        customer_id=customer_id,
+        data_source_id=data_source_id,
+    )
 
 
-@app.post("/customers/{customer_id}/data_sources/{data_source_id}/build_index")
+@app.post(
+    "/customers/{customer_id}/data_sources/{data_source_id}/build_index",
+    response_model=BuildIndexResponse,
+)
 async def post_build_index_job(customer_id: str, data_source_id: str):
-    return {
-        "job_id": "unknown",
-        "customer_id": customer_id,
-        "data_source_id": data_source_id,
-    }
+    return BuildIndexResponse(
+        job_id="unknown",
+        customer_id=customer_id,
+        data_source_id=data_source_id,
+    )
 
 
 @app.post("/customers/{customer_id}/data_sources/{data_source_id}/key")
